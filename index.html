@@ -1,0 +1,679 @@
+<html><head><base href="/" /><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>محلِّل الدرجات - الإصدار 1</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&family=Tajawal:wght@400;500&display=swap" rel="stylesheet">
+<!-- Libraries -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+:root {
+    --primary-color: #800000;
+    --secondary-color: #2c3e50;
+}
+
+body {
+    direction: rtl;
+    font-family: 'Tajawal', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 18cm;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.header-logo {
+    max-width: 300px;
+    margin: 20px auto 10px;
+    display: block;
+}
+
+.main-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+    font-size: 1.425em; /* Reduced from 1.625em */
+    font-weight: bold;
+}
+
+.section-container {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Update table styling */
+.table {
+    border-color: #800000;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.8em;
+    padding: 0.2rem;
+    line-height: 1.2;
+}
+
+.table th {
+    background-color: rgba(128, 0, 0, 0.1);
+    color: #800000;
+    border-color: #800000;
+}
+
+.table td {
+    border-color: #800000;
+    color: #800000;
+}
+
+.total-row {
+    font-weight: bold;
+    background-color: rgba(128, 0, 0, 0.05);
+    color: #800000;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.section-container h2 {
+    color: var(--primary-color);
+    font-size: 1.2em; /* Adding explicit font size, reduced from default */
+}
+
+.grades-table-container {
+    width: 57.6%;
+    margin-right: 0;
+    display: inline-block;
+}
+
+.chart-container {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #600000;
+    border-color: #600000;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--primary-color); /* Changed from var(--secondary-color) to use maroon */
+    font-size: 0.8em;
+    line-height: 1.5;
+}
+
+#gradesChart {
+    max-height: 360px;
+    width: 100% !important;
+    height: auto !important;
+}
+
+.inflation-alert {
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    background-color: #ffe6e6;
+    border: 1px solid #ffcccc;
+}
+
+#printContainer {
+    display: none; 
+    position: relative; 
+    min-height: 29.7cm;
+    background: white;
+    padding: 1cm 2.5cm;
+    margin: 20px auto;
+    width: 21cm;
+    box-sizing: border-box;
+}
+
+.form-control {
+    border-color: #800000;
+}
+
+.form-control:focus {
+    border-color: #800000;
+    box-shadow: 0 0 0 0.2rem rgba(128, 0, 0, 0.25);
+}
+
+textarea {
+    border-color: #800000 !important;
+    min-height: 130%; /* Add this line */
+}
+
+@media print {
+    #printContainer {
+        font-size: 0.42em;
+    }
+
+    #printContainer .inflation-alert {
+        font-size: 0.38em;
+        transform: scale(0.8);
+        transform-origin: top right;
+    }
+
+    .grades-table-container table {
+        font-size: 0.38em;
+        transform: scale(0.8);
+    }
+}
+
+.chart-container {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+#printContainer canvas#printChart {
+    width: 100% !important;
+    height: 200px !important;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <img src="/qu-logo.png" alt="Qatar University logo featuring university name in English and Arabic with maroon architectural graphic" class="header-logo">
+    <h1 class="main-title">محلِّل الدرجات - الإصدار 1</h1>
+    <!-- Class Info Section -->
+    <div class="section-container">
+        <h2>معلومات المقرر</h2>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="courseName">اسم المقرر</label>
+                <input type="text" class="form-control" id="courseName">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="courseCode">رمز المقرر</label>
+                <input type="text" class="form-control" id="courseCode">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="semester">الفصل الدراسي</label>
+                <input type="text" class="form-control" id="semester">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="instructor">اسم المدرّس</label>
+                <input type="text" class="form-control" id="instructor">
+            </div>
+        </div>
+    </div>
+    <!-- Grade Input Section -->
+    <div class="section-container">
+        <h2>إدخال الدرجات</h2>
+        <textarea class="form-control" id="gradesInput" rows="5" placeholder="أدخل الدرجات هنا (A, B+, B, C+, C, D+, D, F, FA, FB, I)"></textarea>
+        <button class="btn btn-primary mt-3" onclick="analyzeGrades()">تحليل الدرجات</button>
+    </div>
+    <!-- Grade Analysis Section -->
+    <div class="section-container">
+        <h2>توزيع الدرجات</h2>
+        <div class="row mb-4">
+            <div class="col-12">
+                <div style="display: flex; justify-content: space-between; gap: 20px;">
+                    <div class="grades-table-container">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>الدرجة</th>
+                                <th>العدد</th>
+                                <th>النسبة</th>
+                            </tr>
+                            </thead>
+                            <tbody id="gradesTableHigh"></tbody>
+                        </table>
+                    </div>
+                    <div class="grades-table-container">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>الدرجة</th>
+                                <th>العدد</th>
+                                <th>النسبة</th>
+                            </tr>
+                            </thead>
+                            <tbody id="gradesTableLow"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="chart-container">
+                    <canvas id="gradesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Inflation Analysis Section -->
+    <div class="section-container">
+        <h2>مؤشر التضخم</h2>
+        <div id="inflationAnalysis"></div>
+        <div class="mb-3">
+            <label for="comments">ملاحظات</label>
+            <textarea class="form-control" id="comments" rows="4" placeholder="اذكر أسباب حصول التضخم إن وجد"></textarea>
+        </div>
+    </div>
+    <button class="btn btn-primary mb-4" onclick="generatePDF()">تصدير إلى PDF</button>
+    <div id="printContainer" style="display: none; position: relative; min-height: 29.7cm;">
+        <div style="text-align: center; margin-bottom: 0.1cm; position: relative;">
+            <div style="position: absolute; left: 0; top: 0; font-size: 9pt; color: #800000; text-align: left;">
+                <div>${getCurrentDate().hijri}</div>
+                <div>${getCurrentDate().georgian}</div>
+            </div>
+            <img src="/qu-logo.png" 
+                 alt="شعار جامعة قطر" 
+                 style="max-width: 150px; height: auto; object-fit: contain;">
+            <h2 style="font-size: 12pt; margin: 0.2cm 0 1cm; color: #800000;">تقرير توزيع الدرجات في المقرر</h2>
+        </div>
+        <div style="margin-bottom: 0.1cm;">
+            <div class="course-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 10pt;">
+                <div><span style="color: #2c3e50; font-weight: bold;">اسم المقرر: </span>${courseData.courseName}</div>
+                <div><span style="color: #2c3e50; font-weight: bold;">رمز المقرر: </span>${courseData.courseCode}</div>
+                <div><span style="color: #2c3e50; font-weight: bold;">الفصل الدراسي: </span>${courseData.semester}</div>
+                <div><span style="color: #2c3e50; font-weight: bold;">اسم المدرّس: </span>${courseData.instructor}</div>
+            </div>
+        </div>
+        <div class="print-table-row" style="display: flex; justify-content: space-between; gap: 8px; margin: 1cm 0 0.1cm;">
+            <h3 style="margin: 0 0 0.1cm; font-size: 12pt; color: #800000;">توزيع الدرجات</h3>
+            <div style="width: 38.4%;">
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
+                    <tbody style="text-align: center; vertical-align: middle;">
+                        ${courseData.gradesTableHigh.replace(/<thead>.*?<\/thead>/s, '').replace(/class="total-row"/g, 'style="font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;"')}
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 38.4%;">
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
+                    <tbody style="text-align: center; vertical-align: middle;">
+                        ${courseData.gradesTableLow.replace(/<thead>.*?<\/thead>/s, '').replace(/class="total-row"/g, 'style="font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;"')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="margin-bottom: 0.1cm; text-align: right;">
+            <h3 style="font-size: 12pt; margin: 0 0 0.1cm; color: #800000;">الرسم البياني</h3>
+            <div style="text-align: right;">
+                <canvas id="printChart"></canvas>
+            </div>
+        </div>
+        <div style="margin-bottom: 0.1cm; transform: scale(0.8); transform-origin: top right;">
+            <h3 style="font-size: 12pt; color: #800000;">مؤشر التضخم</h3>
+            ${courseData.inflationAnalysis}
+        </div>
+        <div style="margin-bottom: 0.2cm;">
+            <h3 style="font-size: 12pt; color: #800000;">ملاحظات</h3>
+            <p style="font-size: 9pt;">${courseData.comments}</p>
+        </div>
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center; color: #800000; font-size: 7.9px; line-height: 1.5; margin-bottom: 0.5cm;">
+            أعد بواسطة محلل الدرجات v.1<br>
+            تصميم: أيمن صالح<br>
+            كلية الشريعة - جامعة قطر<br>
+            الحقوق محفوظة 2024
+        </div>
+    </div>
+    <div class="footer">
+        تصميم: أيمن صالح<br>
+        كلية الشريعة - جامعة قطر<br>
+        الحقوق محفوظة 2024
+    </div>
+</div>
+
+<script>
+let gradesChart = null;
+let gradeCounts = null;
+
+function getCurrentDate() {
+    const today = new Date();
+    const hijriDate = today.toLocaleDateString('ar-SA', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    const georgianDate = today.toLocaleDateString('ar', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    return { hijri: hijriDate, georgian: georgianDate };
+}
+
+function analyzeGrades() {
+    const gradesText = document.getElementById('gradesInput').value.toUpperCase();
+    const inputGrades = gradesText.split(/[,\s]+/).filter(Boolean);
+    
+    const validGrades = ['A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F', 'FA', 'FB', 'I'];
+    
+    const grades = inputGrades.filter(grade => validGrades.includes(grade));
+
+    gradeCounts = {
+        'A': 0, 'B+': 0, 'B': 0, 'C+': 0, 'C': 0,
+        'D+': 0, 'D': 0, 'F': 0, 'FA': 0, 'FB': 0, 'I': 0
+    };
+
+    grades.forEach(grade => {
+        gradeCounts[grade]++;
+    });
+
+    if (grades.length > 0) {
+        updateGradesTable(gradeCounts, grades.length);
+        updateGradesChart(gradeCounts);
+        analyzeInflation(gradeCounts, grades.length);
+    } else {
+        document.getElementById('gradesTableHigh').innerHTML = '';
+        document.getElementById('gradesTableLow').innerHTML = '';
+        document.getElementById('inflationAnalysis').innerHTML = '';
+        if (gradesChart) gradesChart.destroy();
+        gradeCounts = null;
+    }
+}
+
+function updateGradesTable(gradeCounts, total) {
+    const highGrades = ['A', 'B+', 'B'];
+    const lowGrades = ['C+', 'C', 'D+', 'D', 'F', 'FA', 'FB', 'I'];
+    
+    let highTableHTML = '';
+    let lowTableHTML = '';
+    
+    highGrades.forEach(grade => {
+        const count = gradeCounts[grade] || 0;
+        const percentage = ((count / total) * 100).toFixed(1);
+        highTableHTML += `
+            <tr>
+                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${grade}</td>
+                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${count}</td>
+                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${percentage}%</td>
+            </tr>`;
+    });
+    
+    const highTotal = highGrades.reduce((sum, grade) => sum + (gradeCounts[grade] || 0), 0);
+    const highPercentage = ((highTotal / total) * 100).toFixed(1);
+    highTableHTML += `
+        <tr class="total-row">
+            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">المجموع</td>
+            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${highTotal}</td>
+            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${highPercentage}%</td>
+        </tr>`;
+    
+    lowGrades.forEach(grade => {
+        const count = gradeCounts[grade] || 0;
+        const percentage = ((count / total) * 100).toFixed(1);
+        lowTableHTML += `
+            <tr>
+                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${grade}</td>
+                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${count}</td>
+                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${percentage}%</td>
+            </tr>`;
+    });
+    
+    const lowTotal = lowGrades.reduce((sum, grade) => sum + (gradeCounts[grade] || 0), 0);
+    const lowPercentage = ((lowTotal / total) * 100).toFixed(1);
+    lowTableHTML += `
+        <tr class="total-row">
+            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">المجموع</td>
+            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${lowTotal}</td>
+            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${lowPercentage}%</td>
+        </tr>`;
+    
+    document.getElementById('gradesTableHigh').innerHTML = highTableHTML;
+    document.getElementById('gradesTableLow').innerHTML = lowTableHTML;
+}
+
+function updateGradesChart(gradeCounts) {
+    const ctx = document.getElementById('gradesChart').getContext('2d');
+    
+    if (gradesChart) {
+        gradesChart.destroy();
+    }
+    
+    const labels = ['A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F', 'FA', 'FB', 'I'];
+    const data = labels.map(grade => gradeCounts[grade] || 0);
+    
+    gradesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'عدد الدرجات',
+                data: data,
+                backgroundColor: ' rgba(128, 0, 0, 0.6)',
+                borderColor: 'rgba(128, 0, 0, 1)',
+                borderWidth: 1,
+                borderRadius: 5 // Add this line
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                        stepSize: 1,
+                        color: '#800000' // Added maroon color
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#800000' // Added maroon color
+                    }
+                }
+            }
+        }
+    });
+}
+
+function analyzeInflation(gradeCounts, total) {
+    const highGradesTotal = ['A', 'B+', 'B'].reduce((sum, grade) => sum + (gradeCounts[grade] || 0), 0);
+    const lowGradesTotal = ['D+', 'D', 'F'].reduce((sum, grade) => sum + (gradeCounts[grade] || 0), 0);
+    
+    const highPercentage = (highGradesTotal / total) * 100;
+    const lowPercentage = (lowGradesTotal / total) * 100;
+    
+    let message = '';
+    let alertClass = '';
+    
+    if (highPercentage > 50) {
+        message = 'هناك تضخم في الدرجات المرتفعة (A, B+, B)حيث إن مجموعها أكثر من 50%';
+        alertClass = 'inflation-alert';
+    } else if (lowPercentage > 50) {
+        message = 'هناك تضخم في الدرجات المنخفضة (D+, D, F)حيث إن مجموعها أكثر من 50%';
+        alertClass = 'inflation-alert';
+    } else {
+        message = 'لا يوجد تضخم';
+        alertClass = '';
+    }
+    
+    document.getElementById('inflationAnalysis').innerHTML = `<div class="${alertClass}">${message}</div>`;
+}
+
+// Update generatePDF to use course code and semester in filename
+async function generatePDF() {
+    if (!gradeCounts) {
+        alert('الرجاء تحليل الدرجات أولاً');
+        return;
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+
+    const courseCode = document.getElementById('courseCode').value || 'Course';
+    const semester = document.getElementById('semester').value || 'Semester';
+    const fileName = `توزيع الدرجات - ${courseCode} - ${semester}.pdf`;
+    
+    const courseData = {
+        courseName: document.getElementById('courseName').value || '',
+        courseCode: document.getElementById('courseCode').value || '',
+        semester: document.getElementById('semester').value || '',
+        instructor: document.getElementById('instructor').value || '',
+        comments: document.getElementById('comments').value || 'لا توجد ملاحظات',
+        gradesTableHigh: document.querySelector('#gradesTableHigh').closest('.table').outerHTML.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="text-align: center; vertical-align: middle; color: #800000;"'),
+        gradesTableLow: document.querySelector('#gradesTableLow').closest('.table').outerHTML.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="text-align: center; vertical-align: middle; color: #800000;"'),
+        inflationAnalysis: document.getElementById('inflationAnalysis').innerHTML
+    };
+
+    const printContainer = document.getElementById('printContainer');
+    printContainer.style.display = 'block';
+
+    printContainer.innerHTML = `
+        <div style="text-align: center; margin-bottom: 0.1cm; position: relative;">
+            <div style="position: absolute; left: 0; top: 0; font-size: 9pt; color: #800000; text-align: left;">
+                <div>${getCurrentDate().hijri}</div>
+                <div>${getCurrentDate().georgian}</div>
+            </div>
+            <img src="/qu-logo.png" 
+                 alt="شعار جامعة قطر" 
+                 style="max-width: 150px; height: auto; object-fit: contain;">
+            <h2 style="font-size: 12pt; margin: 0.2cm 0 1cm; color: #800000;">تقرير توزيع الدرجات في المقرر</h2>
+        </div>
+        
+        <div style="margin-bottom: 0.1cm;">
+            <div class="course-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 10pt;">
+                <div><span style="color: #2c3e50; font-weight: bold;">اسم المقرر: </span>${courseData.courseName}</div>
+                <div><span style="color: #2c3e50; font-weight: bold;">رمز المقرر: </span>${courseData.courseCode}</div>
+                <div><span style="color: #2c3e50; font-weight: bold;">الفصل الدراسي: </span>${courseData.semester}</div>
+                <div><span style="color: #2c3e50; font-weight: bold;">اسم المدرّس: </span>${courseData.instructor}</div>
+            </div>
+        </div>
+
+        <div class="print-table-row" style="display: flex; justify-content: space-between; gap: 8px; margin: 1cm 0 0.1cm;">
+            <h3 style="margin: 0 0 0.1cm; font-size: 12pt; color: #800000;">توزيع الدرجات</h3>
+            <div style="width: 38.4%;">
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
+                    <tbody style="text-align: center; vertical-align: middle;">
+                        ${courseData.gradesTableHigh.replace(/<thead>.*?<\/thead>/s, '')}
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 38.4%;">
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
+                    <tbody style="text-align: center; vertical-align: middle;">
+                        ${courseData.gradesTableLow.replace(/<thead>.*?<\/thead>/s, '')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 0.1cm; text-align: right;">
+            <h3 style="font-size: 12pt; margin: 0 0 0.1cm; color: #800000;">الرسم البياني</h3>
+            <div style="text-align: right;">
+                <canvas id="printChart"></canvas>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 0.1cm; transform: scale(0.8); transform-origin: top right;">
+            <h3 style="font-size: 12pt; color: #800000;">مؤشر التضخم</h3>
+            ${courseData.inflationAnalysis}
+        </div>
+
+        <div style="margin-bottom: 0.2cm;">
+            <h3 style="font-size: 12pt; color: #800000;">ملاحظات</h3>
+            <p style="font-size: 9pt;">${courseData.comments}</p>
+        </div>
+
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center; color: #800000; font-size: 7.9px; line-height: 1.5; margin-bottom: 0.5cm;">
+            أعد بواسطة محلل الدرجات v.1<br>
+            تصميم: أيمن صالح<br>
+            كلية الشريعة - جامعة قطر<br>
+            الحقوق محفوظة 2024
+        </div>
+    `;
+
+    const printCanvas = document.getElementById('printChart');
+    if (gradesChart && printCanvas) {
+        const chartData = JSON.parse(JSON.stringify(gradesChart.data));
+        const chartOptions = JSON.parse(JSON.stringify(gradesChart.options));
+
+        printCanvas.width = 800;
+        printCanvas.height = 400;
+        
+        new Chart(printCanvas.getContext('2d'), {
+            type: 'bar',
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        ticks: { 
+                            font: { size: 10 },
+                            precision: 0,
+                            stepSize: 1,
+                            color: '#800000' // Added maroon color
+                        },
+                        grace: 0,
+                        min: 0,
+                        suggestedMax: Math.max(...Object.values(gradeCounts)) + 1
+                    },
+                    x: { 
+                        ticks: { 
+                            font: { size: 10 },
+                            color: '#800000' // Added maroon color
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { 
+                        display: true,
+                        position: 'top',
+                        labels: { 
+                            font: { size: 10 },
+                            padding: 10 
+                        }
+                    }
+                },
+                animation: {
+                    duration: 0
+                },
+                elements: {
+                    bar: {
+                        borderWidth: 1,
+                        borderRadius: 5 // Add this line
+                    }
+                }
+            }
+        });
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const canvas = await html2canvas(printContainer, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        imageTimeout: 0,
+        onclone: clonedDoc => {
+            const images = clonedDoc.getElementsByTagName('img');
+            return Promise.all(Array.from(images).map(img => 
+                img.complete ? Promise.resolve() : new Promise(resolve => 
+                    img.addEventListener('load', resolve))
+            ));
+        }
+    });
+
+    const imgWidth = doc.internal.pageSize.getWidth();
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    doc.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+    doc.save(fileName);
+
+    printContainer.style.display = 'none';
+}
+</script>
+
+</body>
+</html>
