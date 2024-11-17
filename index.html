@@ -1,7 +1,4 @@
-<html dir="rtl" lang="ar">
-<head><base href="/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>محلِّل الدرجات - الإصدار 1</title>
+<html><head><base href="/" /><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>محلِّل الدرجات - الإصدار 1</title>
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&family=Tajawal:wght@400;500&display=swap" rel="stylesheet">
@@ -13,7 +10,7 @@
 
 <style>
 :root {
-    --primary-color: #800000;
+    --primary-color: #8E1838; /* Updated Maroon Color */
     --secondary-color: #2c3e50;
 }
 
@@ -53,7 +50,7 @@ body {
 
 /* Update table styling */
 .table {
-    border-color: #800000;
+    border-color: #8E1838; /* Updated Maroon Color */
 }
 
 .table th, .table td {
@@ -65,20 +62,20 @@ body {
 }
 
 .table th {
-    background-color: rgba(128, 0, 0, 0.1);
-    color: #800000;
-    border-color: #800000;
+    background-color: rgba(142, 24, 56, 0.1); /* Updated Background Color */
+    color: #8E1838; /* Updated Maroon Color */
+    border-color: #8E1838; /* Updated Maroon Color */
 }
 
 .table td {
-    border-color: #800000;
-    color: #800000;
+    border-color: #8E1838; /* Updated Maroon Color */
+    color: #8E1838; /* Updated Maroon Color */
 }
 
 .total-row {
     font-weight: bold;
-    background-color: rgba(128, 0, 0, 0.05);
-    color: #800000;
+    background-color: rgba(142, 24, 56, 0.05); /* Updated Background Color */
+    color: #8E1838; /* Updated Maroon Color */
     text-align: center;
     vertical-align: middle;
 }
@@ -113,7 +110,7 @@ body {
 .footer {
     text-align: center;
     padding: 20px;
-    color: var(--primary-color); /* Changed from var(--secondary-color) to use maroon */
+    color: var(--primary-color); /* Changed from var(--secondary-color) to use updated maroon */
     font-size: 0.8em;
     line-height: 1.5;
 }
@@ -144,16 +141,16 @@ body {
 }
 
 .form-control {
-    border-color: #800000;
+    border-color: #8E1838; /* Updated Maroon Color */
 }
 
 .form-control:focus {
-    border-color: #800000;
-    box-shadow: 0 0 0 0.2rem rgba(128, 0, 0, 0.25);
+    border-color: #8E1838; /* Updated Maroon Color */
+    box-shadow: 0 0 0 0.2rem rgba(142, 24, 56, 0.25); /* Updated Shadow Color */
 }
 
 textarea {
-    border-color: #800000 !important;
+    border-color: #8E1838 !important; /* Updated Maroon Color */
     min-height: 130%; /* Add this line */
 }
 
@@ -189,7 +186,7 @@ textarea {
 <body>
 <div class="container">
     <!-- Header -->
-    <img src="qu-logo.png" alt="Qatar University logo featuring university name in English and Arabic with maroon architectural graphic" class="header-logo">
+    <img src="http://qufaculty.qu.edu.qa/wp-content/uploads/2024/07/QU-Logo-04-cut.png" alt="Qatar University logo featuring university name in English and Arabic with maroon architectural graphic" class="header-logo">
     <h1 class="main-title">محلِّل الدرجات - الإصدار 1</h1>
     <!-- Class Info Section -->
     <div class="section-container">
@@ -273,56 +270,70 @@ textarea {
     </div>
     <button class="btn btn-primary mb-4" onclick="generatePDF()">تصدير إلى PDF</button>
     <div id="printContainer" style="display: none; position: relative; min-height: 29.7cm;">
-        <div style="text-align: center; margin-bottom: 0.1cm; position: relative;">
-            <div style="position: absolute; left: 0; top: 0; font-size: 9pt; color: #800000; text-align: left;">
+        <div style="text-align: center; margin-bottom: 0.1cm; position: relative; direction: rtl;">
+            <div style="position: absolute; left: 0; top: 0; font-size: 9pt; color: #8E1838; text-align: left;">
                 <div>${getCurrentDate().hijri}</div>
                 <div>${getCurrentDate().georgian}</div>
             </div>
-            <img src="/qu-logo.png" 
+            <img src="http://qufaculty.qu.edu.qa/wp-content/uploads/2024/07/QU-Logo-04-cut.png" 
                  alt="شعار جامعة قطر" 
                  style="max-width: 150px; height: auto; object-fit: contain;">
-            <h2 style="font-size: 12pt; margin: 0.2cm 0 1cm; color: #800000;">تقرير توزيع الدرجات في المقرر</h2>
+            <h2 style="font-size: 12pt; margin: 0.2cm 0 1cm; color: #8E1838;">تقرير توزيع الدرجات في المقرر</h2>
         </div>
-        <div style="margin-bottom: 0.1cm;">
-            <div class="course-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 10pt;">
+        <div style="margin-bottom: 0.1cm; direction: rtl;">
+            <div class="course-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 10pt; text-align: right;">
                 <div><span style="color: #2c3e50; font-weight: bold;">اسم المقرر: </span>${courseData.courseName}</div>
                 <div><span style="color: #2c3e50; font-weight: bold;">رمز المقرر: </span>${courseData.courseCode}</div>
                 <div><span style="color: #2c3e50; font-weight: bold;">الفصل الدراسي: </span>${courseData.semester}</div>
                 <div><span style="color: #2c3e50; font-weight: bold;">اسم المدرّس: </span>${courseData.instructor}</div>
             </div>
         </div>
-        <div class="print-table-row" style="display: flex; justify-content: space-between; gap: 8px; margin: 1cm 0 0.1cm;">
-            <h3 style="margin: 0 0 0.1cm; font-size: 12pt; color: #800000;">توزيع الدرجات</h3>
+        <div class="print-table-row" style="display: flex; justify-content: space-between; gap: 8px; margin: 1cm 0 0.1cm; direction: rtl;">
+            <h3 style="margin: 0 0 0.1cm; font-size: 12pt; color: #8E1838; text-align: right;">توزيع الدرجات</h3>
             <div style="width: 38.4%;">
-                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
-                    <tbody style="text-align: center; vertical-align: middle;">
-                        ${courseData.gradesTableHigh.replace(/<thead>.*?<\/thead>/s, '').replace(/class="total-row"/g, 'style="font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;"')}
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #8E1838; font-family: 'Tajawal', sans-serif;">
+                    <thead>
+                        <tr>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">الدرجة</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">العدد</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">النسبة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${courseData.gradesTableHigh.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; color: #8E1838; width: 33.33%;"')}
                     </tbody>
                 </table>
             </div>
             <div style="width: 38.4%;">
-                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
-                    <tbody style="text-align: center; vertical-align: middle;">
-                        ${courseData.gradesTableLow.replace(/<thead>.*?<\/thead>/s, '').replace(/class="total-row"/g, 'style="font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;"')}
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #8E1838; font-family: 'Tajawal', sans-serif;">
+                    <thead>
+                        <tr>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">الدرجة</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">العدد</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">النسبة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${courseData.gradesTableLow.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; color: #8E1838; width: 33.33%;"')}
                     </tbody>
                 </table>
             </div>
         </div>
-        <div style="margin-bottom: 0.1cm; text-align: right;">
-            <h3 style="font-size: 12pt; margin: 0 0 0.1cm; color: #800000;">الرسم البياني</h3>
+        <div style="margin-bottom: 0.1cm; text-align: right; direction: rtl;">
+            <h3 style="font-size: 12pt; margin: 0 0 0.1cm; color: #8E1838;">الرسم البياني</h3>
             <div style="text-align: right;">
                 <canvas id="printChart"></canvas>
             </div>
         </div>
-        <div style="margin-bottom: 0.1cm; transform: scale(0.8); transform-origin: top right;">
-            <h3 style="font-size: 12pt; color: #800000;">مؤشر التضخم</h3>
+        <div style="margin-bottom: 0.1cm; transform: scale(0.8); transform-origin: top right; direction: rtl;">
+            <h3 style="font-size: 12pt; color: #8E1838; text-align: right;">مؤشر التضخم</h3>
             ${courseData.inflationAnalysis}
         </div>
-        <div style="margin-bottom: 0.2cm;">
-            <h3 style="font-size: 12pt; color: #800000;">ملاحظات</h3>
-            <p style="font-size: 9pt;">${courseData.comments}</p>
+        <div style="margin-bottom: 0.2cm; direction: rtl;">
+            <h3 style="font-size: 12pt; color: #8E1838; text-align: right;">ملاحظات</h3>
+            <p style="font-size: 9pt; text-align: right;">${courseData.comments}</p>
         </div>
-        <div style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center; color: #800000; font-size: 7.9px; line-height: 1.5; margin-bottom: 0.5cm;">
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center; color: #8E1838; font-size: 7.9px; line-height: 1.5; margin-bottom: 0.5cm; direction: rtl;">
             أعد بواسطة محلل الدرجات v.1<br>
             تصميم: أيمن صالح<br>
             كلية الشريعة - جامعة قطر<br>
@@ -397,9 +408,9 @@ function updateGradesTable(gradeCounts, total) {
         const percentage = ((count / total) * 100).toFixed(1);
         highTableHTML += `
             <tr>
-                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${grade}</td>
-                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${count}</td>
-                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${percentage}%</td>
+                <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #8E1838;">${grade}</td>
+                <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #8E1838;">${count}</td>
+                <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #8E1838;">${percentage}%</td>
             </tr>`;
     });
     
@@ -407,9 +418,9 @@ function updateGradesTable(gradeCounts, total) {
     const highPercentage = ((highTotal / total) * 100).toFixed(1);
     highTableHTML += `
         <tr class="total-row">
-            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">المجموع</td>
-            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${highTotal}</td>
-            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${highPercentage}%</td>
+            <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(142, 24, 56, 0.05); color: #8E1838; text-align: center; vertical-align: middle;">المجموع</td>
+            <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(142, 24, 56, 0.05); color: #8E1838; text-align: center; vertical-align: middle;">${highTotal}</td>
+            <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(142, 24, 56, 0.05); color: #8E1838; text-align: center; vertical-align: middle;">${highPercentage}%</td>
         </tr>`;
     
     lowGrades.forEach(grade => {
@@ -417,9 +428,9 @@ function updateGradesTable(gradeCounts, total) {
         const percentage = ((count / total) * 100).toFixed(1);
         lowTableHTML += `
             <tr>
-                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${grade}</td>
-                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${count}</td>
-                <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #800000;">${percentage}%</td>
+                <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #8E1838;">${grade}</td>
+                <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #8E1838;">${count}</td>
+                <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; vertical-align: middle; color: #8E1838;">${percentage}%</td>
             </tr>`;
     });
     
@@ -427,9 +438,9 @@ function updateGradesTable(gradeCounts, total) {
     const lowPercentage = ((lowTotal / total) * 100).toFixed(1);
     lowTableHTML += `
         <tr class="total-row">
-            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">المجموع</td>
-            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${lowTotal}</td>
-            <td style="border: 1px solid #800000; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(128, 0, 0, 0.05); color: #800000; text-align: center; vertical-align: middle;">${lowPercentage}%</td>
+            <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(142, 24, 56, 0.05); color: #8E1838; text-align: center; vertical-align: middle;">المجموع</td>
+            <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(142, 24, 56, 0.05); color: #8E1838; text-align: center; vertical-align: middle;">${lowTotal}</td>
+            <td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; font-weight: bold; background-color: rgba(142, 24, 56, 0.05); color: #8E1838; text-align: center; vertical-align: middle;">${lowPercentage}%</td>
         </tr>`;
     
     document.getElementById('gradesTableHigh').innerHTML = highTableHTML;
@@ -453,8 +464,8 @@ function updateGradesChart(gradeCounts) {
             datasets: [{
                 label: 'عدد الدرجات',
                 data: data,
-                backgroundColor: ' rgba(128, 0, 0, 0.6)',
-                borderColor: 'rgba(128, 0, 0, 1)',
+                backgroundColor: 'rgba(142, 24, 56, 0.6)', /* Updated Chart Background Color */
+                borderColor: 'rgba(142, 24, 56, 1)', /* Updated Chart Border Color */
                 borderWidth: 1,
                 borderRadius: 5 // Add this line
             }]
@@ -467,12 +478,12 @@ function updateGradesChart(gradeCounts) {
                     ticks: {
                         precision: 0,
                         stepSize: 1,
-                        color: '#800000' // Added maroon color
+                        color: '#8E1838' // Updated Ticks Color
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#800000' // Added maroon color
+                        color: '#8E1838' // Updated Ticks Color
                     }
                 }
             }
@@ -504,6 +515,16 @@ function analyzeInflation(gradeCounts, total) {
     document.getElementById('inflationAnalysis').innerHTML = `<div class="${alertClass}">${message}</div>`;
 }
 
+// Load Image Function
+const loadImage = (url) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = url;
+    });
+};
+
 // Update generatePDF to use course code and semester in filename
 async function generatePDF() {
     if (!gradeCounts) {
@@ -523,8 +544,8 @@ async function generatePDF() {
         semester: document.getElementById('semester').value || '',
         instructor: document.getElementById('instructor').value || '',
         comments: document.getElementById('comments').value || 'لا توجد ملاحظات',
-        gradesTableHigh: document.querySelector('#gradesTableHigh').closest('.table').outerHTML.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="text-align: center; vertical-align: middle; color: #800000;"'),
-        gradesTableLow: document.querySelector('#gradesTableLow').closest('.table').outerHTML.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="text-align: center; vertical-align: middle; color: #800000;"'),
+        gradesTableHigh: document.querySelector('#gradesTableHigh').closest('.table').outerHTML.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="text-align: center; vertical-align: middle; color: #8E1838;"'),
+        gradesTableLow: document.querySelector('#gradesTableLow').closest('.table').outerHTML.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="text-align: center; vertical-align: middle; color: #8E1838;"'),
         inflationAnalysis: document.getElementById('inflationAnalysis').innerHTML
     };
 
@@ -532,19 +553,19 @@ async function generatePDF() {
     printContainer.style.display = 'block';
 
     printContainer.innerHTML = `
-        <div style="text-align: center; margin-bottom: 0.1cm; position: relative;">
-            <div style="position: absolute; left: 0; top: 0; font-size: 9pt; color: #800000; text-align: left;">
+        <div style="text-align: center; margin-bottom: 0.1cm; position: relative; direction: rtl;">
+            <div style="position: absolute; left: 0; top: 0; font-size: 9pt; color: #8E1838; text-align: left;">
                 <div>${getCurrentDate().hijri}</div>
                 <div>${getCurrentDate().georgian}</div>
             </div>
-            <img src="qu-logo.png" 
+            <img src="http://qufaculty.qu.edu.qa/wp-content/uploads/2024/07/QU-Logo-04-cut.png" 
                  alt="شعار جامعة قطر" 
                  style="max-width: 150px; height: auto; object-fit: contain;">
-            <h2 style="font-size: 12pt; margin: 0.2cm 0 1cm; color: #800000;">تقرير توزيع الدرجات في المقرر</h2>
+            <h2 style="font-size: 12pt; margin: 0.2cm 0 1cm; color: #8E1838;">تقرير توزيع الدرجات في المقرر</h2>
         </div>
         
-        <div style="margin-bottom: 0.1cm;">
-            <div class="course-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 10pt;">
+        <div style="margin-bottom: 0.1cm; direction: rtl;">
+            <div class="course-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 10pt; text-align: right;">
                 <div><span style="color: #2c3e50; font-weight: bold;">اسم المقرر: </span>${courseData.courseName}</div>
                 <div><span style="color: #2c3e50; font-weight: bold;">رمز المقرر: </span>${courseData.courseCode}</div>
                 <div><span style="color: #2c3e50; font-weight: bold;">الفصل الدراسي: </span>${courseData.semester}</div>
@@ -552,42 +573,56 @@ async function generatePDF() {
             </div>
         </div>
 
-        <div class="print-table-row" style="display: flex; justify-content: space-between; gap: 8px; margin: 1cm 0 0.1cm;">
-            <h3 style="margin: 0 0 0.1cm; font-size: 12pt; color: #800000;">توزيع الدرجات</h3>
+        <div class="print-table-row" style="display: flex; justify-content: space-between; gap: 8px; margin: 1cm 0 0.1cm; direction: rtl;">
+            <h3 style="margin: 0 0 0.1cm; font-size: 12pt; color: #8E1838; text-align: right;">توزيع الدرجات</h3>
             <div style="width: 38.4%;">
-                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
-                    <tbody style="text-align: center; vertical-align: middle;">
-                        ${courseData.gradesTableHigh.replace(/<thead>.*?<\/thead>/s, '')}
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #8E1838; font-family: 'Tajawal', sans-serif;">
+                    <thead>
+                        <tr>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">الدرجة</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">العدد</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">النسبة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${courseData.gradesTableHigh.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; color: #8E1838; width: 33.33%;"')}
                     </tbody>
                 </table>
             </div>
             <div style="width: 38.4%;">
-                <table style="width: 100%; border-collapse: collapse; border: 1px solid #800000; text-align: center;">
-                    <tbody style="text-align: center; vertical-align: middle;">
-                        ${courseData.gradesTableLow.replace(/<thead>.*?<\/thead>/s, '')}
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #8E1838; font-family: 'Tajawal', sans-serif;">
+                    <thead>
+                        <tr>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">الدرجة</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">العدد</th>
+                            <th style="width: 33.33%; border: 1px solid #8E1838; padding: 4px; font-size: 9pt; background-color: rgba(142, 24, 56, 0.1); color: #8E1838; font-weight: bold; text-align: center;">النسبة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${courseData.gradesTableLow.replace(/<thead>.*?<\/thead>/s, '').replace(/<td/g, '<td style="border: 1px solid #8E1838; padding: 4px; font-size: 9pt; text-align: center; color: #8E1838; width: 33.33%;"')}
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div style="margin-bottom: 0.1cm; text-align: right;">
-            <h3 style="font-size: 12pt; margin: 0 0 0.1cm; color: #800000;">الرسم البياني</h3>
+        <div style="margin-bottom: 0.1cm; text-align: right; direction: rtl;">
+            <h3 style="font-size: 12pt; margin: 0 0 0.1cm; color: #8E1838;">الرسم البياني</h3>
             <div style="text-align: right;">
                 <canvas id="printChart"></canvas>
             </div>
         </div>
 
-        <div style="margin-bottom: 0.1cm; transform: scale(0.8); transform-origin: top right;">
-            <h3 style="font-size: 12pt; color: #800000;">مؤشر التضخم</h3>
+        <div style="margin-bottom: 0.1cm; transform: scale(0.8); transform-origin: top right; direction: rtl;">
+            <h3 style="font-size: 12pt; color: #8E1838; text-align: right;">مؤشر التضخم</h3>
             ${courseData.inflationAnalysis}
         </div>
 
-        <div style="margin-bottom: 0.2cm;">
-            <h3 style="font-size: 12pt; color: #800000;">ملاحظات</h3>
-            <p style="font-size: 9pt;">${courseData.comments}</p>
+        <div style="margin-bottom: 0.2cm; direction: rtl;">
+            <h3 style="font-size: 12pt; color: #8E1838; text-align: right;">ملاحظات</h3>
+            <p style="font-size: 9pt; text-align: right;">${courseData.comments}</p>
         </div>
 
-        <div style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center; color: #800000; font-size: 7.9px; line-height: 1.5; margin-bottom: 0.5cm;">
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center; color: #8E1838; font-size: 7.9px; line-height: 1.5; margin-bottom: 0.5cm; direction: rtl;">
             أعد بواسطة محلل الدرجات v.1<br>
             تصميم: أيمن صالح<br>
             كلية الشريعة - جامعة قطر<br>
@@ -616,7 +651,7 @@ async function generatePDF() {
                             font: { size: 10 },
                             precision: 0,
                             stepSize: 1,
-                            color: '#800000' // Added maroon color
+                            color: '#8E1838' // Updated Ticks Color
                         },
                         grace: 0,
                         min: 0,
@@ -625,7 +660,7 @@ async function generatePDF() {
                     x: { 
                         ticks: { 
                             font: { size: 10 },
-                            color: '#800000' // Added maroon color
+                            color: '#8E1838' // Updated Ticks Color
                         }
                     }
                 },
@@ -659,12 +694,15 @@ async function generatePDF() {
         useCORS: true,
         logging: false,
         imageTimeout: 0,
-        onclone: clonedDoc => {
+        onclone: async (clonedDoc) => {
             const images = clonedDoc.getElementsByTagName('img');
-            return Promise.all(Array.from(images).map(img => 
-                img.complete ? Promise.resolve() : new Promise(resolve => 
-                    img.addEventListener('load', resolve))
-            ));
+            await Promise.all(
+                Array.from(images).map(img => 
+                    img.complete ? Promise.resolve() : new Promise(resolve => 
+                        img.addEventListener('load', resolve)
+                    )
+                )
+            );
         }
     });
 
